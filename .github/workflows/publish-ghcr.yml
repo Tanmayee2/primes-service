@@ -32,6 +32,7 @@ jobs:
 
       - name: Build and push the image
         run: |
-          docker login --username Tanmayee2 --password ${{secrets.ACCESS_TOKEN}} ghcr.io
+          export CR_PAT = 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
+          echo $CR_PAT | docker login ghcr.io -u Tanmayee2 --password-stdin
           docker build -t ghcr.io/Tanmayee2/primes-service:latest --file Dockerfile .  
           docker push ghcr.io/Tanmayee2/primes-service:latest
