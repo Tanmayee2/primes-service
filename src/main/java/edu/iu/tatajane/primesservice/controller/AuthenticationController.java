@@ -17,13 +17,13 @@ import java.io.IOException;
 @RestController
 public class AuthenticationController {
 
-    private final IAuthenticationService iAuthenticationService ;
+    private final IAuthenticationService authenticationService ;
     private final AuthenticationManager authenticationManager;
 
     private final TokenService tokenService;
 
-    public AuthenticationController(IAuthenticationService iAuthenticationService, AuthenticationManager authenticationManager, TokenService tokenService) {
-        this.iAuthenticationService = iAuthenticationService;
+    public AuthenticationController(IAuthenticationService authenticationService, AuthenticationManager authenticationManager, TokenService tokenService) {
+        this.authenticationService = authenticationService;
         this.authenticationManager = authenticationManager;
         this.tokenService = tokenService;
     }
@@ -31,7 +31,7 @@ public class AuthenticationController {
     @PostMapping("/register")
     public boolean register(@RequestBody Customer customer){
         try{
-            return iAuthenticationService.register(customer);
+            return authenticationService.register(customer);
         }
         catch (IOException e){
             throw new RuntimeException(e);
@@ -40,11 +40,11 @@ public class AuthenticationController {
 
     @PostMapping("/login")
     public String login(@RequestBody Customer customer){
-        Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                        customer.getUsername(),customer.getPassword()
-                )
-        );
-        return tokenService.generateToken(authentication);
+        Authentication authentication = authenticationManager
+                .authenticate(
+                        new UsernamePasswordAuthenticationToken(
+                            customer.getUsername()
+                            ,customer.getPassword()));
+            return tokenService.generateToken(authentication);
     }
 }

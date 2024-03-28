@@ -14,10 +14,10 @@ import java.io.OutputStream;
 @Service
 public class AuthenticationService implements IAuthenticationService, UserDetailsService {
 
-    IAuthenticationRepository iAuthenticationRepository;
+    IAuthenticationRepository authenticationRepository;
 
-    public AuthenticationService(IAuthenticationRepository iAuthenticationRepository) {
-        this.iAuthenticationRepository = iAuthenticationRepository;
+    public AuthenticationService(IAuthenticationRepository authenticationRepository) {
+        this.authenticationRepository = authenticationRepository;
     }
 
     @Override
@@ -26,7 +26,7 @@ public class AuthenticationService implements IAuthenticationService, UserDetail
         BCryptPasswordEncoder bc = new BCryptPasswordEncoder();
         String passwordEncoded = bc.encode(customer.getPassword());
         customer.setPassword(passwordEncoded);
-        return iAuthenticationRepository.save(customer);
+        return authenticationRepository.save(customer);
     }
 
     @Override
@@ -37,7 +37,7 @@ public class AuthenticationService implements IAuthenticationService, UserDetail
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException{
         try{
-            Customer customer = iAuthenticationRepository.findByUsername(username);
+            Customer customer = authenticationRepository.findByUsername(username);
             if(customer==null){
                 throw new UsernameNotFoundException("");
             }

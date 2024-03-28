@@ -19,8 +19,6 @@ public class AuthenticationFileRepository implements IAuthenticationRepository {
     private static final Logger LOG =
             LoggerFactory.getLogger(AuthenticationFileRepository.class);
     private static final String DATABASE_NAME = "data/customers.txt";
-
-
     private static final String NEW_LINE = System.lineSeparator();
 
     public AuthenticationFileRepository() {
@@ -34,7 +32,6 @@ public class AuthenticationFileRepository implements IAuthenticationRepository {
         }
     }
     @Override
-
     public Customer findByUsername (String username) throws IOException {
         Path path = Paths.get(DATABASE_NAME);
         List<String> data = Files.readAllLines (path);
@@ -59,7 +56,9 @@ public class AuthenticationFileRepository implements IAuthenticationRepository {
                     customer.getPassword().trim());
             data += NEW_LINE;
             Files.write(path,
-                    data.getBytes (StandardCharsets.UTF_8), StandardOpenOption.CREATE, StandardOpenOption.APPEND);
+                    data.getBytes (StandardCharsets.UTF_8),
+                    StandardOpenOption.CREATE,
+                    StandardOpenOption.APPEND);
             return true;
         }
         return false;
