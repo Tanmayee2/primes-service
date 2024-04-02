@@ -1,5 +1,6 @@
 package edu.iu.tatajane.primesservice.service;
 import edu.iu.tatajane.primesservice.model.Customer;
+import edu.iu.tatajane.primesservice.repository.AuthenticationDBRepository;
 import edu.iu.tatajane.primesservice.repository.IAuthenticationRepository;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -14,14 +15,15 @@ import java.io.OutputStream;
 @Service
 public class AuthenticationService implements IAuthenticationService, UserDetailsService {
 
-    IAuthenticationRepository authenticationRepository;
+    AuthenticationDBRepository authenticationRepository;
 
-    public AuthenticationService(IAuthenticationRepository authenticationRepository) {
+    public AuthenticationService(
+            AuthenticationDBRepository authenticationRepository) {
         this.authenticationRepository = authenticationRepository;
     }
 
     @Override
-    public boolean register(Customer customer) throws IOException {
+    public Customer register(Customer customer) throws IOException {
         System.out.println(customer);
         BCryptPasswordEncoder bc = new BCryptPasswordEncoder();
         String passwordEncoded = bc.encode(customer.getPassword());
@@ -46,7 +48,7 @@ public class AuthenticationService implements IAuthenticationService, UserDetail
                     .password(customer.getPassword())
                     .build();
         }
-        catch (IOException e){
+        catch (Exception e){
             throw new RuntimeException(e);
         }
 
